@@ -10,17 +10,8 @@
     {{ group.description|linebreaksbr }}
   </p>
 {% for post in page_obj %}
-  <article>
-  <ul>
-    <li>
-      Автор: {{ post.author.get_full_name }}
-    </li>
-    <li>
-      Дата публикации: {{ post.pub_date|date:"d E Y" }}
-    </li>
-  </ul>
-  <p>{{ post.text|linebreaksbr }}</p>
-  </article>
+  {% include 'includes/post.html' %}
+  <a href="{% url 'posts:post_detail' post.id %}">подробная информация</a>
   {% if not forloop.last %}<hr>{% endif %}
 {% endfor %}
 {% include 'posts/includes/paginator.html' %}

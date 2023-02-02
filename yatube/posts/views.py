@@ -82,7 +82,7 @@ def post_create(request):
         form.instance.author = request.user
         form.save()
         return redirect('posts:profile', request.user.username)
-    return render(request, 'posts/create_post.html', context)
+    return render(request, 'posts/new_post.html', context)
 
 
 def post_edit(request, post_id):
@@ -90,12 +90,14 @@ def post_edit(request, post_id):
     form = PostForm(request.POST or None)
     is_edit = True if request.user == post.author else False
     context = {
+        'post_id': post_id,
         'is_edit': is_edit,
         'form': form,
     }
     if not is_edit:
         return redirect('posts:post_detail', post_id)
     if form.is_valid():
+        form.instance.author = request.user  # без этого не работает
         form.save()
         return redirect('posts:post_detail', post_id)
-    return render(request, 'posts/update_post.html', context)
+    return render(request, 'posts/new_post.html', context)
