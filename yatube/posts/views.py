@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 
 from .models import Post, Group
 from .forms import PostForm
@@ -51,7 +52,6 @@ def profile(request, username):
     context = {
         'author': user,
         'page_obj': page_obj,
-        'num_of_pub': len(post_list),
 
     }
 
@@ -61,12 +61,10 @@ def profile(request, username):
 def post_detail(request, post_id):
     # Здесь код запроса к модели и создание словаря контекста
     post = get_object_or_404(Post, id=post_id)
-    num_of_pub = Post.objects.filter(author__exact=post.author).count()
     author = post.author
     username = author.username
     context = {
         'post': post,
-        'num_of_pub': num_of_pub,
         'username': username,
         'author': author
     }
@@ -74,6 +72,7 @@ def post_detail(request, post_id):
     return render(request, 'posts/post_detail.html', context)
 
 
+@login_required
 def post_create(request):
     form = PostForm(request.POST or None)
     context = {
@@ -89,8 +88,7 @@ def post_create(request):
 def post_edit(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     form = PostForm(request.POST or None)
-    current_user = request.user
-    is_edit = True if current_user == post.author else False
+    is_edit = True if request.user == post.author else False
     context = {
         'is_edit': is_edit,
         'form': form,
@@ -98,7 +96,6 @@ def post_edit(request, post_id):
     if not is_edit:
         return redirect('posts:post_detail', post_id)
     if form.is_valid():
-        form.instance.author = request.user
         form.save()
         return redirect('posts:post_detail', post_id)
     return render(request, 'posts/update_post.html', context)
