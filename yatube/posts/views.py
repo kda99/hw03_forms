@@ -64,7 +64,7 @@ def post_create(request):
         form.instance.author = request.user
         form.save()
         return redirect('posts:profile', request.user.username)
-    return render(request, 'posts/new_post.html', context)
+    return render(request, 'posts/create_post.html', context)
 
 
 def post_edit(request, post_id):
@@ -82,4 +82,4 @@ def post_edit(request, post_id):
         form.instance.author = request.user  # без этого не работает
         form.save()
         return redirect('posts:post_detail', post_id)
-    return render(request, 'posts/new_post.html', context)
+    return render(request, 'posts/create_post.html', context)

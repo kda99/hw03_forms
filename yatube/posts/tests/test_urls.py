@@ -42,9 +42,9 @@ class PostModelTest(TestCase):
             '/': 'posts/index.html',
             '/group/test-slug/': 'posts/group_list.html',
             '/profile/author/': 'posts/profile.html',
-            f'/posts/{self.post.id}/edit/': 'posts/new_post.html',
+            f'/posts/{self.post.id}/edit/': 'posts/create_post.html',
             '/posts/1/': 'posts/post_detail.html',
-            '/create/': 'posts/new_post.html',
+            '/create/': 'posts/create_post.html',
         }
 
         for address, template in templates_url_names.items():
