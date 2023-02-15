@@ -47,15 +47,17 @@ class PostModelTest(TestCase):
             '/create/': 'posts/new_post.html',
         }
 
-        # for address, template in templates_url_names.items():
-        #     with self.subTest(address=address):
-        #         response = self.guest_client.get(address)
-        #         self.assertTemplateUsed(response, template)
-        #
-        # for address, template in templates_url_names.items():
-        #     with self.subTest(address=address):
-        #         response = self.authorized_client.get(address)
-        #         self.assertTemplateUsed(response, template)
+        for address, template in templates_url_names.items():
+            if address not in (f'/posts/{self.post.id}/edit/', '/create/'):
+                with self.subTest(address=address):
+                    response = self.guest_client.get(address)
+                    self.assertTemplateUsed(response, template)
+
+        for address, template in templates_url_names.items():
+            if address not in (f'/posts/{self.post.id}/edit/',):
+                with self.subTest(address=address):
+                    response = self.authorized_client.get(address)
+                    self.assertTemplateUsed(response, template)
 
         for address, template in templates_url_names.items():
             with self.subTest(address=address):
