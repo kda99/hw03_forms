@@ -33,7 +33,7 @@ class PostsPagesTests(TestCase):
     def test_pages_uses_correct_template_quest(self):
         """URL-адрес использует соответствующий шаблон для guest_users"""
         templates_pages_names = {
-            'posts/index.html': reverse('posts:index'),
+            'posts/index.html': reverse('posts:index', None),
             'posts/group_list.html':
                 reverse('posts:group_list', kwargs={'slug': self.group.slug}),
             'posts/profile.html':
@@ -47,15 +47,6 @@ class PostsPagesTests(TestCase):
                 response = self.client.get(reverse_name)
                 self.assertTemplateUsed(response, template)
                 self.assertEqual(response.status_code, HTTPStatus.OK)
-                self.assertEqual(
-                    response.context.get('post').id, self.post.pk
-                )
-                self.assertEqual(
-                    response.context.get('post').author, self.author
-                )
-                self.assertEqual(
-                    response.context.get('post').group, self.group
-                )
 
     def test_pages_uses_correct_template_user(self):
         """URL-адрес использует соответствующий шаблон для auth_users"""

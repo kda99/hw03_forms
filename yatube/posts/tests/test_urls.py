@@ -20,7 +20,6 @@ class PostModelTest(TestCase):
             text='Тестовый пост',
             author=cls.author,
             group=cls.group,
-            id=1
         )
 
     def setUp(self):
